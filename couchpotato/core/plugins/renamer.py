@@ -266,6 +266,7 @@ class Renamer(Plugin):
 
                 media = group['media']
                 media_title = getTitle(media)
+                movie_title_Original = media['info']['original_title']
 
                 # Overwrite destination when set in category
                 destination = to_folder
@@ -312,6 +313,7 @@ class Renamer(Plugin):
 
                 # Remove weird chars from movie name
                 movie_name = re.sub(r"[\x00\/\\:\*\?\"<>\|]", '', media_title)
+                movie_name_original = re.sub(r"[\x00\/\\:\*\?\"<>\|]", '', movie_title_Original)
 
                 # Put 'The' at the end
                 name_the = movie_name
@@ -324,8 +326,10 @@ class Renamer(Plugin):
                     'ext': 'mkv',
                     'namethe': name_the.strip(),
                     'thename': movie_name.strip(),
+                    'thenameOriginal': movie_name_original.strip(),
                     'year': media['info']['year'],
                     'first': name_the[0].upper(),
+                    'firstOriginal': movie_name_original[0].upper(),
                     'quality': group['meta_data']['quality']['label'],
                     'quality_type': group['meta_data']['quality_type'],
                     'video': group['meta_data'].get('video'),
@@ -1277,8 +1281,10 @@ rename_options = {
         'ext': 'Extention (mkv)',
         'namethe': 'Moviename, The',
         'thename': 'The Moviename',
+        'thenameOriginal': 'The Moviename Original',
         'year': 'Year (2011)',
         'first': 'First letter (M)',
+        'firstOriginal': 'First letter Original (M)',
         'quality': 'Quality (720p)',
         'quality_type': '(HD) or (SD)',
         '3d': '3D',
@@ -1350,6 +1356,22 @@ config = [{
                 },
                 {
                     'name': 'file_name',
+                    'label': 'File naming',
+                    'description': 'Name of the file',
+                    'default': '<thename><cd>.<ext>',
+                    'type': 'choice',
+                    'options': rename_options
+                },
+                {
+                    'name': 'thenameOriginal',
+                    'label': 'File naming',
+                    'description': 'Name of the file',
+                    'default': '<thename><cd>.<ext>',
+                    'type': 'choice',
+                    'options': rename_options
+                },
+                {
+                    'name': 'firstOriginal',
                     'label': 'File naming',
                     'description': 'Name of the file',
                     'default': '<thename><cd>.<ext>',
